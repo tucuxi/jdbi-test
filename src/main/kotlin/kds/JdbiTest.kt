@@ -4,6 +4,7 @@ import com.fasterxml.uuid.Generators
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
+import org.jdbi.v3.core.kotlin.mapTo
 
 data class Invoice(
     val id: String,
@@ -48,6 +49,6 @@ fun insertRandomInvoice(handle: Handle) {
 
 fun retrieveInvoices(handle: Handle): List<Invoice> {
     return handle.select("SELECT id, type, recipient FROM invoices ORDER BY id DESC")
-        .mapTo(Invoice::class.java)
+        .mapTo<Invoice>()
         .toList()
 }
