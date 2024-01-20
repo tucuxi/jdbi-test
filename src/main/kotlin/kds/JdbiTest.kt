@@ -1,10 +1,10 @@
 package kds
 
-import com.fasterxml.uuid.Generators
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.core.kotlin.mapTo
+import ulid.ULID
 
 data class Invoice(
     val id: String,
@@ -15,7 +15,7 @@ data class Invoice(
 fun main() {
     val jdbi = Jdbi.create("jdbc:postgresql://localhost/first", "user", "")
     jdbi.installPlugin(KotlinPlugin())
-
+    
     jdbi.inTransaction<Unit, Exception> { transactionHandle ->
         repeat(5) {
             insertRandomInvoice(transactionHandle)
@@ -31,13 +31,13 @@ fun main() {
 
 fun createTable(jdbi: Jdbi) {
     jdbi.useHandle<Exception> { handle ->
-        handle.execute("CREATE TABLE invoices(id CHAR(39) PRIMARY KEY, type VARCHAR, recipient VARCHAR)")
+        handle.execute("CREATE TABLE invoices(id VARCHAR PRIMARY KEY, type VARCHAR, recipient VARCHAR)")
     }
 }
 
 fun insertRandomInvoice(handle: Handle) {
     val invoice = Invoice(
-        id = "in_" + Generators.timeBasedEpochGenerator().generate(), // UUIDv7
+        id = randomInvoiceId(),
         type = "plain",
         recipient = "joe",
     )
@@ -52,3 +52,5 @@ fun retrieveInvoices(handle: Handle): List<Invoice> {
         .mapTo<Invoice>()
         .toList()
 }
+
+fun randomInvoiceId() = "in_" + ULID.randomULID()
