@@ -1,6 +1,7 @@
 package kds
 
 import com.fasterxml.uuid.Generators
+import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 
@@ -14,13 +15,17 @@ fun main() {
     val jdbi = Jdbi.create("jdbc:postgresql://localhost/first", "user", "")
     jdbi.installPlugin(KotlinPlugin())
 
-    repeat(5) {
-        insertRandomInvoice(jdbi)
+    jdbi.inTransaction<Unit, Exception> { transactionHandle ->
+        repeat(5) {
+            insertRandomInvoice(transactionHandle)
+        }
     }
 
-    retrieveInvoices(jdbi)
-        .take(10)
-        .forEach { println(it) }
+    val sample = jdbi.inTransaction<List<Invoice>, Exception> { transactionHandle ->
+        retrieveInvoices(transactionHandle).take(10)
+    }
+
+    sample.forEach { println(it) }
 }
 
 fun createTable(jdbi: Jdbi) {
@@ -29,24 +34,20 @@ fun createTable(jdbi: Jdbi) {
     }
 }
 
-fun insertRandomInvoice(jdbi: Jdbi) {
+fun insertRandomInvoice(handle: Handle) {
     val invoice = Invoice(
         id = "in_" + Generators.timeBasedEpochGenerator().generate(), // UUIDv7
         type = "plain",
         recipient = "joe",
     )
-    jdbi.useHandle<Exception> { handle ->
-        handle.execute(
-            "INSERT INTO invoices(id, type, recipient) values(?, ?, ?)",
-            invoice.id, invoice.type, invoice.recipient
-        )
-    }
+    handle.execute(
+        "INSERT INTO invoices(id, type, recipient) values(?, ?, ?)",
+        invoice.id, invoice.type, invoice.recipient
+    )
 }
 
-fun retrieveInvoices(jdbi: Jdbi): List<Invoice> {
-    return jdbi.withHandle<List<Invoice>, Exception> { handle ->
-        handle.select("SELECT id, type, recipient FROM invoices ORDER BY id DESC")
-            .mapTo(Invoice::class.java)
-            .toList()
-    }
+fun retrieveInvoices(handle: Handle): List<Invoice> {
+    return handle.select("SELECT id, type, recipient FROM invoices ORDER BY id DESC")
+        .mapTo(Invoice::class.java)
+        .toList()
 }
