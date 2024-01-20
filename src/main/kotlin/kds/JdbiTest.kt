@@ -15,15 +15,15 @@ data class Invoice(
 fun main() {
     val jdbi = Jdbi.create("jdbc:postgresql://localhost/first", "user", "")
     jdbi.installPlugin(KotlinPlugin())
-    
-    jdbi.inTransaction<Unit, Exception> { transactionHandle ->
+
+    jdbi.useTransaction<Exception>() { handle ->
         repeat(5) {
-            insertRandomInvoice(transactionHandle)
+            insertRandomInvoice(handle)
         }
     }
 
-    val sample = jdbi.inTransaction<List<Invoice>, Exception> { transactionHandle ->
-        retrieveInvoices(transactionHandle).take(10)
+    val sample = jdbi.inTransaction<List<Invoice>, Exception> { handle ->
+        retrieveInvoices(handle).take(10)
     }
 
     sample.forEach { println(it) }
