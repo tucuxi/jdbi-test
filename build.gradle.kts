@@ -1,5 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "1.9.22"
+    id("org.flywaydb.flyway") version ("10.6.0")
 }
 
 group = "kds"
@@ -10,6 +11,12 @@ repositories {
 }
 
 val kotlinVersion by extra(project.property("kotlinVersion"))
+
+buildscript {
+    dependencies {
+        classpath("org.flywaydb:flyway-database-postgresql:10.6.0")
+    }
+}
 
 dependencies {
     implementation(platform("org.jdbi:jdbi3-bom:3.37.1"))
@@ -27,5 +34,11 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(20)
+    jvmToolchain(21)
+}
+
+flyway {
+    url = "jdbc:postgresql://localhost/first"
+    user = "user"
+    password = ""
 }
