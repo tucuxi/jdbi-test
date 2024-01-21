@@ -29,12 +29,6 @@ fun main() {
     sample.forEach { println(it) }
 }
 
-fun createTable(jdbi: Jdbi) {
-    jdbi.useHandle<Exception> { handle ->
-        handle.execute("CREATE TABLE invoices(id VARCHAR PRIMARY KEY, type VARCHAR, recipient VARCHAR)")
-    }
-}
-
 fun insertRandomInvoice(handle: Handle) {
     val invoice = Invoice(
         id = randomInvoiceId(),
