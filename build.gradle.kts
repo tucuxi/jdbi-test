@@ -1,3 +1,5 @@
+val kotlinVersion by extra(project.property("kotlinVersion"))
+
 plugins {
     kotlin("jvm") version "1.9.22"
     id("org.flywaydb.flyway") version ("10.6.0")
@@ -9,8 +11,6 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
 }
-
-val kotlinVersion by extra(project.property("kotlinVersion"))
 
 buildscript {
     dependencies {
