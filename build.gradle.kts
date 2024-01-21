@@ -19,9 +19,8 @@ buildscript {
 }
 
 dependencies {
-    implementation(platform("org.jdbi:jdbi3-bom:3.37.1"))
-    implementation("org.jdbi:jdbi3-core")
-    implementation("org.jdbi:jdbi3-kotlin")
+    implementation("org.jdbi:jdbi3-core:3.37.1")
+    implementation("org.jdbi:jdbi3-kotlin:3.37.1")
     implementation("org.postgresql:postgresql:42.7.1")
     implementation("ch.qos.logback:logback-classic:1.4.12")
     implementation("org.slf4j:slf4j-api:2.0.5")
