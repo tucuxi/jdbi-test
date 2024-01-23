@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/first?currentSchema=invoicing
+    username: user
+    password:
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    locations: classpath:db/migration
+    schemas: invoicing
