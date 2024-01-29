@@ -12,19 +12,22 @@ class Demo(private val jdbi: Jdbi) {
 
     @GetMapping("/invoices")
     fun retrieveInvoices(): List<Invoice> {
-        val dao = jdbi.onDemand<InvoiceDao>()
-        return dao.listInvoices()
+        return jdbi
+            .onDemand<InvoiceDao>()
+            .listInvoices()
     }
 
     @PostMapping("/invoices")
     fun insertRandomInvoice(): Invoice {
-        val dao = jdbi.onDemand<InvoiceDao>()
         val invoice = Invoice(
             id = randomInvoiceId(),
             type = "plain",
             recipient = "joe",
         )
-        dao.createInvoice(invoice)
+        jdbi
+            .onDemand<InvoiceDao>()
+            .createInvoice(invoice)
+
         return invoice
     }
 
