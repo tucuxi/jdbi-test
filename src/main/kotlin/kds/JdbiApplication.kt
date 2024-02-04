@@ -2,6 +2,7 @@ package kds
 
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
+import org.jdbi.v3.core.statement.Slf4JSqlLogger
 import org.jdbi.v3.sqlobject.SqlObjectPlugin
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -24,5 +25,6 @@ class Configuration {
         return Jdbi.create(dataSource)
             .installPlugin(KotlinPlugin())
             .installPlugin(SqlObjectPlugin())
+            .setSqlLogger(Slf4JSqlLogger())
     }
 }

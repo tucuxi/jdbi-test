@@ -7,3 +7,8 @@ spring:
   flyway:
     locations: classpath:db/migration
     schemas: invoicing
+
+logging:
+  level:
+    root: INFO
+    org.jdbi.sql: DEBUG
