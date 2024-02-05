@@ -24,7 +24,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.11")
     implementation("ch.qos.logback:logback-core:1.4.14")
     implementation("com.aallam.ulid:ulid-kotlin:1.3.0")
-    implementation("org.jdbi:jdbi3-core:3.43.0")
+    implementation("org.jdbi:jdbi3-core:3.44.0")
     implementation("org.jdbi:jdbi3-spring5:3.43.0")
     implementation("org.jdbi:jdbi3-kotlin:3.44.0")
     implementation("org.jdbi:jdbi3-kotlin-sqlobject:3.44.0")
