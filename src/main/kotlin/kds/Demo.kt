@@ -1,7 +1,7 @@
 package kds
 
 import org.jdbi.v3.core.Jdbi
-import org.jdbi.v3.sqlobject.kotlin.attach
+import org.jdbi.v3.core.kotlin.mapTo
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -13,8 +13,10 @@ class Demo(private val jdbi: Jdbi) {
     @GetMapping("/invoices")
     fun retrieveInvoices(): List<Invoice> {
         return jdbi.inTransaction<List<Invoice>, Exception> { handle ->
-            val invoiceDao = handle.attach(InvoiceDao::class)
-            invoiceDao.listInvoices()
+            handle
+                .select("SELECT * FROM invoices ORDER BY id DESC")
+                .mapTo<Invoice>()
+                .toList()
         }
     }
 
@@ -26,8 +28,10 @@ class Demo(private val jdbi: Jdbi) {
             recipient = "joe",
         )
         jdbi.useTransaction<Exception> { handle ->
-            val invoiceDao = handle.attach(InvoiceDao::class)
-            invoiceDao.createInvoice(invoice)
+            handle
+                .createUpdate("INSERT INTO invoices(id, type, recipient) values(:id, :type, :recipient)")
+                .bindBean(invoice)
+                .execute()
         }
         return invoice
     }
