@@ -1,41 +1,42 @@
 package kds
 
-import org.jdbi.v3.core.Jdbi
-import org.jdbi.v3.core.kotlin.mapTo
+import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import ulid.ULID
 
 @RestController
-class Demo(private val jdbi: Jdbi) {
+class Demo {
+
+    @Autowired
+    private lateinit var invoiceDao: InvoiceDao
 
     @GetMapping("/invoices")
+    @Transactional
     fun retrieveInvoices(): List<Invoice> {
-        return jdbi.inTransaction<List<Invoice>, Exception> { handle ->
-            handle
-                .select("SELECT * FROM invoices ORDER BY id DESC")
-                .mapTo<Invoice>()
-                .toList()
-        }
+        return invoiceDao.findAll()
+    }
+
+    @GetMapping("/invoices/{id}")
+    @Transactional
+    fun retrieveInvoice(@PathVariable id: String): Invoice {
+        return invoiceDao.findById(id)
     }
 
     @PostMapping("/invoices")
+    @Transactional
     fun insertRandomInvoice(): Invoice {
         val invoice = Invoice(
             id = randomInvoiceId(),
             type = "plain",
             recipient = "joe",
         )
-        jdbi.useTransaction<Exception> { handle ->
-            handle
-                .createUpdate("INSERT INTO invoices(id, type, recipient) values(:id, :type, :recipient)")
-                .bindBean(invoice)
-                .execute()
-        }
+        invoiceDao.insert(invoice)
         return invoice
     }
-
 }
 
 private fun randomInvoiceId() = "in_" + ULID.randomULID()
