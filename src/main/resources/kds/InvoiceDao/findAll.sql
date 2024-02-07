@@ -1,2 +1,2 @@
-SELECT id, type, recipient
+SELECT *
 FROM invoices;
