@@ -37,6 +37,10 @@ dependencies {
     testImplementation("de.softwareforge.testing:pg-embedded:5.1.0")
 }
 
-tasks.named<Test>("test") {
-    useJUnitPlatform()
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+        }
+    }
 }
