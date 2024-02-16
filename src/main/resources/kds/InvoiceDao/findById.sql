@@ -1,3 +1,1 @@
-SELECT *
-FROM invoices
-WHERE id = :id;
+SELECT * FROM invoices WHERE id = :id 
