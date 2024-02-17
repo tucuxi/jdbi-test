@@ -4,10 +4,10 @@ import ulid.ULID
 
 sealed class Event {
     val id = "ev_" + ULID.randomULID()
-    val createdAt = System.currentTimeMillis()
+    val time = System.currentTimeMillis()
+    val domainObject = "event"
 
-    class CreateInvoice(invoice: Invoice) : Event() {
-        val invoiceId = invoice.id
-        val invoiceType = invoice.type
+    data class CreateInvoice(val invoice: Invoice) : Event() {
+        val action = "create_invoice"
     }
 }

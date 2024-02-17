@@ -34,7 +34,7 @@ class Demo(val invoiceDao: InvoiceDao, val eventDao: EventDao) {
         )
         invoiceDao.insert(invoice)
         val event = Event.CreateInvoice(invoice)
-        eventDao.insert(event.id, event.createdAt, mapper.writeValueAsString(event))
+        eventDao.insert(event, mapper.writeValueAsString(event))
         return invoice
     }
 }

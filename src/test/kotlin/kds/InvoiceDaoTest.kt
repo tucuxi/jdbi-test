@@ -34,10 +34,11 @@ internal class InvoiceDaoTest {
 
         @JvmStatic
         @BeforeAll
-        fun createTable() {
-            postgresExtension.sharedHandle
-                .execute("CREATE TABLE IF NOT EXISTS invoices(id VARCHAR PRIMARY KEY, type VARCHAR, recipient VARCHAR)")
+        fun createTables() {
+            postgresExtension.sharedHandle.useTransaction<Exception> {
+                it.execute("CREATE TABLE IF NOT EXISTS invoices(id VARCHAR PRIMARY KEY, type VARCHAR, recipient VARCHAR)")
+                it.execute("CREATE TABLE IF NOT EXISTS events(id VARCHAR PRIMARY KEY, time BIGINT NOT NULL, data JSONB NOT NULL)")
+            }
         }
-
     }
 }
