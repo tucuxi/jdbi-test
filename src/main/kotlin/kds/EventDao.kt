@@ -11,5 +11,5 @@ import org.jdbi.v3.sqlobject.statement.SqlUpdate
 @UseClasspathSqlLocator
 interface EventDao{
     @SqlUpdate
-    fun insert(@Bind id: String, @Bind createdAt: Long, @Bind data: String)
+    fun insert(@BindKotlin event: Event, @Bind data: String)
 }
