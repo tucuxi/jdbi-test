@@ -1,5 +1,6 @@
 package kds
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.softwareforge.testing.postgres.junit5.EmbeddedPgExtension
 import de.softwareforge.testing.postgres.junit5.MultiDatabaseBuilder
 import org.jdbi.v3.sqlobject.kotlin.KotlinSqlObjectPlugin
@@ -11,15 +12,16 @@ import ulid.ULID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class InvoiceDaoTest {
+internal class OutboxDaoTest {
 
     @Test
-    fun `Find invoice by id should return newly created invoice`() {
-        val invoiceDao = postgresExtension.jdbi.onDemand<InvoiceDao>()
-        val invoice = Invoice("in_" + ULID.randomULID(), "plain", "recipient")
-        invoiceDao.insert(invoice)
-        val invoiceRetrieved = invoiceDao.findById(invoice.id)
-        assertEquals(invoice, invoiceRetrieved)
+    fun `findAll should return newly created event`() {
+        val outboxDao = postgresExtension.jdbi.onDemand<OutboxDao>()
+        val event = HeartbeatEvent()
+        outboxDao.insert(OutboxEntry.fromEvent(event))
+        val allEvents = outboxDao.findAll()
+        assertEquals(1, allEvents.size)
+        assertEquals(event.id, allEvents[0].id)
     }
 
     companion object {
@@ -35,9 +37,10 @@ internal class InvoiceDaoTest {
         @JvmStatic
         @BeforeAll
         fun createTable() {
-            postgresExtension.sharedHandle.useTransaction<Exception> {
-                it.execute("CREATE TABLE invoices (id VARCHAR PRIMARY KEY, type VARCHAR, recipient VARCHAR)")
-            }
+            postgresExtension.sharedHandle
+                .execute("CREATE TABLE outbox (id VARCHAR PRIMARY KEY, data VARCHAR NOT NULL)")
         }
+
+        val mapper = jacksonObjectMapper()
     }
 }

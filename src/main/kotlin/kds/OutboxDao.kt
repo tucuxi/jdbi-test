@@ -9,7 +9,11 @@ import org.jdbi.v3.sqlobject.statement.SqlUpdate
 
 @JdbiRepository
 @UseClasspathSqlLocator
-interface EventDao{
+interface OutboxDao{
+
     @SqlUpdate
-    fun insert(@BindKotlin event: Event, @Bind data: String)
+    fun insert(@BindKotlin entry: OutboxEntry)
+
+    @SqlQuery
+    fun findAll(): List<OutboxEntry>
 }

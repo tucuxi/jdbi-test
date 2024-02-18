@@ -1,18 +1,13 @@
 package kds
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import jakarta.transaction.Transactional
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-import ulid.ULID
 
 @RestController
-class Demo(val invoiceDao: InvoiceDao, val eventDao: EventDao) {
-
-    private val mapper = jacksonObjectMapper()
+class Demo(val invoiceDao: InvoiceDao, val outboxDao: OutboxDao) {
 
     @GetMapping("/invoices")
     fun retrieveInvoices(): List<Invoice> {
@@ -27,16 +22,15 @@ class Demo(val invoiceDao: InvoiceDao, val eventDao: EventDao) {
     @PostMapping("/invoices")
     @Transactional
     fun insertRandomInvoice(): Invoice {
-        val invoice = Invoice(
-            id = randomInvoiceId(),
-            type = "plain",
-            recipient = "joe",
-        )
+        val invoice = Invoice(type = "plain", recipient = "joe")
         invoiceDao.insert(invoice)
-        val event = Event.CreateInvoice(invoice)
-        eventDao.insert(event, mapper.writeValueAsString(event))
+        val event = DraftInvoiceEvent(invoice)
+        outboxDao.insert(OutboxEntry.fromEvent(event))
         return invoice
     }
-}
 
-private fun randomInvoiceId() = "in_" + ULID.randomULID()
+    @GetMapping("/outbox")
+    fun retrieveEvents(): List<OutboxEntry> {
+        return outboxDao.findAll()
+    }
+}

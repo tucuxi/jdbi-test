@@ -28,6 +28,7 @@ dependencies {
     implementation("org.jdbi:jdbi3-spring5:3.44.1")
     implementation("org.jdbi:jdbi3-kotlin:3.44.1")
     implementation("org.jdbi:jdbi3-kotlin-sqlobject:3.44.1")
+    implementation("org.jdbi:jdbi3-jackson2:3.44.1")
     implementation("org.flywaydb:flyway-core:10.8.1")
     implementation("org.flywaydb:flyway-database-postgresql:10.7.1")
     runtimeOnly("org.postgresql:postgresql:42.7.1")
