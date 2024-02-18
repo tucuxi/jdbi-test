@@ -7,6 +7,7 @@ import org.jdbi.v3.sqlobject.kotlin.KotlinSqlObjectPlugin
 import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.jdbi.v3.testing.junit5.JdbiExtension
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.RegisterExtension
 import ulid.ULID
 import kotlin.test.Test
@@ -14,9 +15,16 @@ import kotlin.test.assertEquals
 
 internal class OutboxDaoTest {
 
+    val outboxDao = postgresExtension.jdbi.onDemand<OutboxDao>()
+    
+    @BeforeEach
+    fun cleanTable() {
+        postgresExtension.sharedHandle
+            .execute("DELETE FROM outbox")
+    }
+
     @Test
     fun `findAll should return newly created event`() {
-        val outboxDao = postgresExtension.jdbi.onDemand<OutboxDao>()
         val event = HeartbeatEvent()
         outboxDao.insert(OutboxEntry.fromEvent(event))
         val allEvents = outboxDao.findAll()
@@ -40,7 +48,7 @@ internal class OutboxDaoTest {
             postgresExtension.sharedHandle
                 .execute("CREATE TABLE outbox (id VARCHAR PRIMARY KEY, data VARCHAR NOT NULL)")
         }
-
+      
         val mapper = jacksonObjectMapper()
     }
 }
