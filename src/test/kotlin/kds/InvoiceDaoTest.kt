@@ -6,6 +6,7 @@ import org.jdbi.v3.sqlobject.kotlin.KotlinSqlObjectPlugin
 import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.jdbi.v3.testing.junit5.JdbiExtension
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.RegisterExtension
 import ulid.ULID
 import kotlin.test.Test
@@ -13,9 +14,16 @@ import kotlin.test.assertEquals
 
 internal class InvoiceDaoTest {
 
+    val invoiceDao = postgresExtension.jdbi.onDemand<InvoiceDao>()
+
+    @BeforeEach
+    fun cleanTable() {
+        postgresExtension.sharedHandle
+            .execute("DELETE FROM invoices")
+    }
+    
     @Test
-    fun `Find invoice by id should return newly created invoice`() {
-        val invoiceDao = postgresExtension.jdbi.onDemand<InvoiceDao>()
+    fun `findById should return newly created invoice`() {
         val invoice = Invoice("in_" + ULID.randomULID(), "plain", "recipient")
         invoiceDao.insert(invoice)
         val invoiceRetrieved = invoiceDao.findById(invoice.id)
@@ -35,9 +43,8 @@ internal class InvoiceDaoTest {
         @JvmStatic
         @BeforeAll
         fun createTable() {
-            postgresExtension.sharedHandle.useTransaction<Exception> {
-                it.execute("CREATE TABLE invoices (id VARCHAR PRIMARY KEY, type VARCHAR, recipient VARCHAR)")
-            }
+            postgresExtension.sharedHandle
+                .execute("CREATE TABLE invoices (id VARCHAR PRIMARY KEY, type VARCHAR, recipient VARCHAR)")
         }
     }
 }
