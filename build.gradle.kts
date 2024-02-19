@@ -23,7 +23,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
     implementation("org.slf4j:slf4j-api:2.0.12")
-    implementation("ch.qos.logback:logback-core:1.4.14")
+    implementation("ch.qos.logback:logback-core:1.5.0")
     implementation("com.aallam.ulid:ulid-kotlin:1.3.0")
     implementation("org.jdbi:jdbi3-core")
     implementation("org.jdbi:jdbi3-spring5")
