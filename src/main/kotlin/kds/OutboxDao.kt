@@ -16,4 +16,10 @@ interface OutboxDao{
 
     @SqlQuery
     fun findAll(): List<OutboxEntry>
+
+    @SqlQuery
+    fun findUnconsumed(@Bind consumer: String, @Bind limit: Int): List<OutboxEntry>
+
+    @SqlUpdate
+    fun markConsumedUntil(@Bind consumer: String, @Bind eventId: String)
 }

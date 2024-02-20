@@ -2,15 +2,23 @@ package kds
 
 import ulid.ULID
 
-sealed class Event(
-    val id: String = "ev_" + ULID.randomULID(),
-    val time: Long = System.currentTimeMillis(),
-    val action: String,
-) {
+sealed class Event(val action: String) {
+    val id: String = nextEventId()
+    val time: Long = System.currentTimeMillis()
     val domainObject = "event"
+
+    companion object {
+        private var ulid = ULID.nextULID()
+
+        @Synchronized
+        fun nextEventId(): String {
+            ulid = ULID.Monotonic.nextULID(ulid)
+            return "ev_$ulid"
+        }
+    }
 }
 
-class HeartbeatEvent() : Event(action = "heartbeat")
+data class HeartbeatEvent(val message: String = "") : Event("heartbeat")
 
-class DraftInvoiceEvent(val invoice: Invoice) : Event(action = "draft_invoice")
+data class DraftInvoiceEvent(val invoice: Invoice) : Event("draft_invoice")
 

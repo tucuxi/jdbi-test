@@ -1,1 +1,1 @@
-INSERT INTO outbox (id, data) VALUES (:id, :data)
+INSERT INTO outbox (eventId, data) VALUES (:eventId, :data::jsonb)

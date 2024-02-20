@@ -24,7 +24,7 @@ internal class InvoiceDaoTest {
     
     @Test
     fun `findById should return newly created invoice`() {
-        val invoice = Invoice("in_" + ULID.randomULID(), "plain", "recipient")
+        val invoice = Invoice("plain", "recipient")
         invoiceDao.insert(invoice)
         val invoiceRetrieved = invoiceDao.findById(invoice.id)
         assertEquals(invoice, invoiceRetrieved)

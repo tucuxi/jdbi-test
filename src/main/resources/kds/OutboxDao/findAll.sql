@@ -1,1 +1,1 @@
-SELECT * from outbox ORDER BY id ASC
+SELECT * from outbox ORDER BY eventId ASC
