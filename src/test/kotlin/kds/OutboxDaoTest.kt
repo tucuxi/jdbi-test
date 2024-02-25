@@ -68,7 +68,6 @@ internal class OutboxDaoTest {
     @Test
     fun `findUnconsumed should return oldest events first`() {
         val events = arrayOf(HeartbeatEvent(), HeartbeatEvent(), HeartbeatEvent())
-        events.forEach { println(it.id) }
         events.forEach { outboxDao.insert(OutboxEntry.fromEvent(it)) }
         outboxDao.markConsumedUntil("TestConsumer", events.first().id)
         val unconsumedEvents = outboxDao.findUnconsumed("TestConsumer", 3)
