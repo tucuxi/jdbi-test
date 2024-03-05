@@ -1,1 +1,0 @@
-CREATE TABLE consumed (consumer VARCHAR PRIMARY KEY, event VARCHAR NOT NULL)

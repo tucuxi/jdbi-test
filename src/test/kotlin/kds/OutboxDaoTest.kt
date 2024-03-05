@@ -21,7 +21,7 @@ internal class OutboxDaoTest {
     fun cleanTable() {
         with(postgresExtension.sharedHandle) {
             execute("DELETE FROM outbox")
-            execute("DELETE FROM consumed")
+            execute("DELETE FROM processed")
         }
     }
 
@@ -35,45 +35,47 @@ internal class OutboxDaoTest {
     }
 
     @Test
-    fun `findUnconsumed should return unconsumed event`() {
+    fun `findUnprocessed should return unprocessed event`() {
         val event = HeartbeatEvent()
         outboxDao.insert(OutboxEntry.fromEvent(event))
-        val unconsumedEvents1 = outboxDao.findUnconsumed("FirstTestConsumer", 1)
-        assertEquals(1, unconsumedEvents1.size)
-        assertEquals(event.id, unconsumedEvents1.first().eventId)
-        val unconsumedEvents2 = outboxDao.findUnconsumed("SecondTestConsumer", 1)
-        assertEquals(1, unconsumedEvents2.size)
-        assertEquals(event.id, unconsumedEvents2.first().eventId)
+        val unprocessedEvents1 = outboxDao.findUnprocessed("FirstProcessor", 1)
+        assertEquals(1, unprocessedEvents1.size)
+        assertEquals(event.id, unprocessedEvents1.first().eventId)
+        val unprocessedEvents2 = outboxDao.findUnprocessed("SecondProcessor", 1)
+        assertEquals(1, unprocessedEvents2.size)
+        assertEquals(event.id, unprocessedEvents2.first().eventId)
     }
 
     @Test
-    fun `findUnconsumed should not return consumed event`() {
+    fun `findUnprocessed should not return processed event`() {
+        val processor = "TestProcessor"
         val event = HeartbeatEvent()
         outboxDao.insert(OutboxEntry.fromEvent(event))
-        outboxDao.markConsumedUntil("TestConsumer", event.id)
-        val unconsumedEvents = outboxDao.findUnconsumed("TestConsumer", 1)
-        assertEquals(0, unconsumedEvents.size)
+        outboxDao.markProcessedUntil(processor, event.id)
+        val unprocessedEvents = outboxDao.findUnprocessed(processor, 1)
+        assertEquals(0, unprocessedEvents.size)
     }
     
     @Test
-    fun `findUnconsumed should not be affected by other consumers`() {
+    fun `findUnprocessed should not be affected by other processors`() {
         val event = HeartbeatEvent()
         outboxDao.insert(OutboxEntry.fromEvent(event))
-        outboxDao.markConsumedUntil("FirstTestConsumer", event.id)
-        val unconsumedEvents = outboxDao.findUnconsumed("SecondTestConsumer", 1)
-        assertEquals(1, unconsumedEvents.size)
-        assertEquals(event.id, unconsumedEvents.first().eventId)
+        outboxDao.markProcessedUntil("FirstProcessor", event.id)
+        val unprocessedEvents = outboxDao.findUnprocessed("SecondProcessor", 1)
+        assertEquals(1, unprocessedEvents.size)
+        assertEquals(event.id, unprocessedEvents.first().eventId)
     }
 
     @Test
-    fun `findUnconsumed should return oldest events first`() {
+    fun `findUnprocessed should return oldest events first`() {
+        val processor = "TestProcessor"
         val events = arrayOf(HeartbeatEvent(), HeartbeatEvent(), HeartbeatEvent())
         events.forEach { outboxDao.insert(OutboxEntry.fromEvent(it)) }
-        outboxDao.markConsumedUntil("TestConsumer", events.first().id)
-        val unconsumedEvents = outboxDao.findUnconsumed("TestConsumer", 3)
-        assertEquals(2, unconsumedEvents.size)
-        assertEquals(events[1].id, unconsumedEvents[0].eventId)
-        assertEquals(events[2].id, unconsumedEvents[1].eventId)
+        outboxDao.markProcessedUntil(processor, events.first().id)
+        val unprocessedEvents = outboxDao.findUnprocessed(processor, 3)
+        assertEquals(2, unprocessedEvents.size)
+        assertEquals(events[1].id, unprocessedEvents[0].eventId)
+        assertEquals(events[2].id, unprocessedEvents[1].eventId)
     }
 
     companion object {
@@ -91,7 +93,7 @@ internal class OutboxDaoTest {
         fun createTables() {
             with(postgresExtension.sharedHandle) {
                 execute("CREATE TABLE outbox (eventid VARCHAR PRIMARY KEY, data JSONB NOT NULL)")
-                execute("CREATE TABLE consumed (consumer VARCHAR PRIMARY KEY, eventid VARCHAR NOT NULL)")
+                execute("CREATE TABLE processed (processor VARCHAR PRIMARY KEY, eventid VARCHAR NOT NULL)")
             }
         }
       

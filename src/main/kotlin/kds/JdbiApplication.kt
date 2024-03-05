@@ -11,6 +11,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
+import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import javax.sql.DataSource
 
@@ -24,6 +25,7 @@ fun main(args: Array<String>) {
 }
 
 @Configuration
+@EnableScheduling
 class Configuration {
 
     @Bean

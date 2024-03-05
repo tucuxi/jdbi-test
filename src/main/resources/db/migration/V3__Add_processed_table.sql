@@ -1,0 +1,1 @@
+CREATE TABLE processed (processor VARCHAR PRIMARY KEY, eventId VARCHAR NOT NULL)
