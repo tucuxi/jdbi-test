@@ -21,7 +21,7 @@ class OutboxProcessor(val outboxDao: OutboxDao) {
         val timeTaken = measureTime {
             eventsProcessed = processOldestUnprocessedEvents(PROCESSOR_ID, LIMIT)
         }
-        logger.info { "Processed $eventsProcessed events in $timeTaken" }
+        logger.info { "Processed $eventsProcessed outbox entries in $timeTaken" }
     }
 
     @Transactional

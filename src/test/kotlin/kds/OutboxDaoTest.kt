@@ -19,9 +19,9 @@ internal class OutboxDaoTest {
     
     @BeforeEach
     fun cleanTable() {
-        with(postgresExtension.sharedHandle) {
-            execute("DELETE FROM outbox")
-            execute("DELETE FROM processed")
+        postgresExtension.sharedHandle.useTransaction<Exception> {
+            it.execute("DELETE FROM processed")
+            it.execute("DELETE FROM outbox")
         }
     }
 
@@ -91,9 +91,9 @@ internal class OutboxDaoTest {
         @JvmStatic
         @BeforeAll
         fun createTables() {
-            with(postgresExtension.sharedHandle) {
-                execute("CREATE TABLE outbox (eventid VARCHAR PRIMARY KEY, data JSONB NOT NULL)")
-                execute("CREATE TABLE processed (processor VARCHAR PRIMARY KEY, eventid VARCHAR NOT NULL)")
+            postgresExtension.sharedHandle.useTransaction<Exception> {
+                it.execute("CREATE TABLE outbox (eventid VARCHAR PRIMARY KEY, data JSONB NOT NULL)")
+                it.execute("CREATE TABLE processed (processor VARCHAR PRIMARY KEY, eventid VARCHAR REFERENCES outbox)")
             }
         }
       
