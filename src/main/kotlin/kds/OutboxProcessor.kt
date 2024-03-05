@@ -16,18 +16,20 @@ class OutboxProcessor(val outboxDao: OutboxDao) {
 
     @Scheduled(fixedDelay = 60000)
     fun processOutbox() {
-        processOldestUnprocessedEvents(PROCESSOR_ID, LIMIT)
+        var eventsProcessed: Int
+        
+        val timeTaken = measureTime {
+            eventsProcessed = processOldestUnprocessedEvents(PROCESSOR_ID, LIMIT)
+        }
+        logger.info { "Processed $eventsProcessed events in $timeTaken" }
     }
 
     @Transactional
     private fun processOldestUnprocessedEvents(processor: String, limit: Int): Int {
         val events = outboxDao.findUnprocessed(processor, limit)
         if (events.isNotEmpty()) {
-            val timeTaken = measureTime {
-                // Send events...
-                outboxDao.markProcessedUntil(processor, events.last().eventId)
-            }
-            logger.info { "Processed ${events.size} events in $timeTaken" }
+            // Send events...
+            outboxDao.markProcessedUntil(processor, events.last().eventId)
         }
         return events.size
     }
