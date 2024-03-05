@@ -1,5 +1,6 @@
 package kds
 
+import kotlin.time.measureTime
 import jakarta.transaction.Transactional
 import mu.KotlinLogging
 import org.springframework.scheduling.annotation.Scheduled
@@ -15,15 +16,19 @@ class OutboxProcessor(val outboxDao: OutboxDao) {
 
     @Scheduled(fixedDelay = 60000)
     fun processOutbox() {
-        processOldestUnprocessedEvents()
+        processOldestUnprocessedEvents(PROCESSOR_ID, LIMIT)
     }
 
     @Transactional
-    private fun processOldestUnprocessedEvents() {
-        val events = outboxDao.findUnprocessed(PROCESSOR_ID, LIMIT)
+    private fun processOldestUnprocessedEvents(processor: String, limit: Int): Int {
+        val events = outboxDao.findUnprocessed(processor, limit)
         if (events.isNotEmpty()) {
-            outboxDao.markProcessedUntil(PROCESSOR_ID, events.last().eventId)
+            val timeTaken = measureTime {
+                // Send events...
+                outboxDao.markProcessedUntil(processor, events.last().eventId)
+            }
+            logger.info { "Processed ${events.size} events in $timeTaken" }
         }
-        logger.info("Processed ${events.size} events")
+        return events.size
     }
 }
