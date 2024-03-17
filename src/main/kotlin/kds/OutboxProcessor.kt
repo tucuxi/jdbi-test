@@ -19,7 +19,6 @@ class OutboxProcessor(val outboxDao: OutboxDao) {
     @Scheduled(fixedDelay = 60000, initialDelayString = "#{ T(java.util.concurrent.ThreadLocalRandom).current().nextInt(30000, 60000) }")
     fun processOutbox() {
         var eventsProcessed: Int
-        
         val timeTaken = measureTime {
             eventsProcessed = processOldestUnprocessedEvents(PROCESSOR_ID, LIMIT)
         }
@@ -28,6 +27,10 @@ class OutboxProcessor(val outboxDao: OutboxDao) {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     private fun processOldestUnprocessedEvents(processor: String, limit: Int): Int {
+        // This has been designed to avoid race conditions when multiple instances
+        // with this code run concurrently. Do not make changes unless you know
+        // what you are doing.
+        outboxDao.updateLastProcessedTime(processor)
         val events = outboxDao.findUnprocessed(processor, limit)
         if (events.isNotEmpty()) {
             // Send events...

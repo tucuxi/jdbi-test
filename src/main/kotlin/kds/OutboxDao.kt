@@ -22,4 +22,7 @@ interface OutboxDao{
 
     @SqlUpdate
     fun markProcessedUntil(@Bind processor: String, @Bind eventId: String)
+
+    @SqlUpdate
+    fun updateLastProcessedTime(@Bind processor: String)
 }

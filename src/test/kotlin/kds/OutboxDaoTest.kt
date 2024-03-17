@@ -93,7 +93,7 @@ internal class OutboxDaoTest {
         fun createTables() {
             postgresExtension.sharedHandle.useTransaction<Exception> {
                 it.execute("CREATE TABLE outbox (eventid VARCHAR PRIMARY KEY, data JSONB NOT NULL)")
-                it.execute("CREATE TABLE processed (processor VARCHAR PRIMARY KEY, eventid VARCHAR REFERENCES outbox)")
+                it.execute("CREATE TABLE processed (processor VARCHAR PRIMARY KEY, eventid VARCHAR REFERENCES outbox, lastProcessedTime TIMESTAMP)")
             }
         }
       
