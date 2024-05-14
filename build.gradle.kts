@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
-    id("org.springframework.boot") version "3.2.4"
+    id("org.springframework.boot") version "3.2.5"
     id("io.spring.dependency-management") version "1.1.4"
 }
 
@@ -24,14 +24,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("ch.qos.logback:logback-core:1.5.5")
+    implementation("ch.qos.logback:logback-core:1.5.6")
     implementation("com.aallam.ulid:ulid-kotlin:1.3.0")
     implementation("org.jdbi:jdbi3-core")
     implementation("org.jdbi:jdbi3-spring5")
     implementation("org.jdbi:jdbi3-kotlin")
     implementation("org.jdbi:jdbi3-kotlin-sqlobject")
     implementation("org.jdbi:jdbi3-jackson2")
-    implementation("org.flywaydb:flyway-core:10.11.0")
+    implementation("org.flywaydb:flyway-core:10.12.0")
     implementation("org.flywaydb:flyway-database-postgresql:10.12.0")
     runtimeOnly("org.postgresql:postgresql:42.7.3")
     testImplementation(kotlin("test"))
