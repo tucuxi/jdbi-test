@@ -24,7 +24,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.10")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("ch.qos.logback:logback-core:1.5.6")
+    implementation("ch.qos.logback:logback-core:1.5.7")
     implementation("com.aallam.ulid:ulid-kotlin:1.3.0")
     implementation("org.jdbi:jdbi3-core")
     implementation("org.jdbi:jdbi3-spring5")
