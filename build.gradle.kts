@@ -36,7 +36,7 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql:42.7.4")
     testImplementation(kotlin("test"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jdbi:jdbi3-testing:3.45.4")
+    testImplementation("org.jdbi:jdbi3-testing")
     testImplementation("de.softwareforge.testing:pg-embedded:5.2.0")
 }
 
