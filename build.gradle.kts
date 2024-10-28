@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jdbi:jdbi3-kotlin")
     implementation("org.jdbi:jdbi3-kotlin-sqlobject")
     implementation("org.jdbi:jdbi3-jackson2")
-    implementation("org.flywaydb:flyway-core:10.19.0")
+    implementation("org.flywaydb:flyway-core:10.20.1")
     implementation("org.flywaydb:flyway-database-postgresql:10.20.0")
     runtimeOnly("org.postgresql:postgresql:42.7.4")
     testImplementation(kotlin("test"))
