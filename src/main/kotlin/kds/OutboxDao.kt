@@ -1,6 +1,6 @@
 package kds
 
-import org.jdbi.v3.spring5.JdbiRepository
+import org.jdbi.v3.spring.JdbiRepository
 import org.jdbi.v3.sqlobject.customizer.Bind
 import org.jdbi.v3.sqlobject.kotlin.BindKotlin
 import org.jdbi.v3.sqlobject.locator.UseClasspathSqlLocator

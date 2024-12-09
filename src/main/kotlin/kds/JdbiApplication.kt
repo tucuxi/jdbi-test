@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.core.statement.Slf4JSqlLogger
-import org.jdbi.v3.spring5.EnableJdbiRepositories
+import org.jdbi.v3.spring.EnableJdbiRepositories
 import org.jdbi.v3.sqlobject.kotlin.KotlinSqlObjectPlugin
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -27,7 +27,7 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.5.12")
     implementation("com.aallam.ulid:ulid-kotlin:1.3.0")
     implementation("org.jdbi:jdbi3-core")
-    implementation("org.jdbi:jdbi3-spring5")
+    implementation("org.jdbi:jdbi3-spring")
     implementation("org.jdbi:jdbi3-kotlin")
     implementation("org.jdbi:jdbi3-kotlin-sqlobject")
     implementation("org.jdbi:jdbi3-jackson2")
