@@ -32,7 +32,7 @@ dependencies {
     implementation("org.jdbi:jdbi3-kotlin-sqlobject")
     implementation("org.jdbi:jdbi3-jackson2")
     implementation("org.flywaydb:flyway-core:11.8.1")
-    implementation("org.flywaydb:flyway-database-postgresql:11.8.0")
+    implementation("org.flywaydb:flyway-database-postgresql:11.8.2")
     runtimeOnly("org.postgresql:postgresql:42.7.5")
     testImplementation(kotlin("test"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
