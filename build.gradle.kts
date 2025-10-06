@@ -17,7 +17,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(platform("org.jdbi:jdbi3-bom:3.49.5"))
+    implementation(platform("org.jdbi:jdbi3-bom:3.49.6"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
