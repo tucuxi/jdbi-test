@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost/first?currentSchema=invoicing
-    username: kds
+    username: postgres
     password:
     driver-class-name: org.postgresql.Driver
   flyway:
