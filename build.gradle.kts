@@ -1,8 +1,7 @@
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.spring") version "2.2.21"
-    id("org.springframework.boot") version "4.0.0"
-    id("io.spring.dependency-management") version "1.1.7"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.spring.boot)
 }
 
 group = "kds"
@@ -17,27 +16,32 @@ kotlin {
 }
 
 dependencies {
-    implementation(platform("org.jdbi:jdbi3-bom:3.51.0"))
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
-    implementation("org.slf4j:slf4j-api:2.0.17")
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("ch.qos.logback:logback-core:1.5.23")
-    implementation("com.aallam.ulid:ulid-kotlin:1.5.0")
-    implementation("org.jdbi:jdbi3-core")
-    implementation("org.jdbi:jdbi3-spring")
-    implementation("org.jdbi:jdbi3-kotlin")
-    implementation("org.jdbi:jdbi3-kotlin-sqlobject")
-    implementation("org.jdbi:jdbi3-jackson2")
-    implementation("org.flywaydb:flyway-core:11.19.1")
-    implementation("org.flywaydb:flyway-database-postgresql:11.19.1")
-    runtimeOnly("org.postgresql:postgresql:42.7.8")
+    // BOMs
+    implementation(platform(libs.jdbi.bom))
+    implementation(platform(libs.spring.boot.dependencies))
+
+    // Spring Core
+    implementation(libs.spring.boot.starter.jpa)
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.jackson.module.kotlin)
+    implementation(kotlin("reflect"))
+
+    // JDBI Bundle
+    implementation(libs.bundles.jdbi)
+    
+    // Database
+    implementation(libs.bundles.flyway)
+    runtimeOnly(libs.postgresql)
+
+    // Utilities
+    implementation(libs.kotlin.logging)
+    implementation(libs.ulid)
+
+    // Testing
     testImplementation(kotlin("test"))
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jdbi:jdbi3-testing")
-    testImplementation("de.softwareforge.testing:pg-embedded:5.4.1")
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.jdbi.testing)
+    testImplementation(libs.pg.embedded)
 }
 
 testing {
