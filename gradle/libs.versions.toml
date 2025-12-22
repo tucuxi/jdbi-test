@@ -1,7 +1,7 @@
 [versions]
 # Plugins
 kotlin = "2.2.21"
-springBoot = "4.0.0"
+springBoot = "4.0.1"
 
 # Libraries
 jdbi = "3.51.0"
