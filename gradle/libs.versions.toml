@@ -5,7 +5,7 @@ springBoot = "4.0.1"
 
 # Libraries
 jdbi = "3.51.0"
-flyway = "11.19.1"
+flyway = "11.20.0"
 postgresql = "42.7.8"
 kotlinLogging = "3.0.5"
 ulid = "1.5.0"
