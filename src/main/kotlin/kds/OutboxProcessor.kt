@@ -1,7 +1,7 @@
 package kds
 
 import kotlin.time.measureTime
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Isolation
@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional
 
 const val PROCESSOR_ID = "kafka"
 const val LIMIT = 10
-    
+
+private val logger = KotlinLogging.logger {}
+
 @Component
 class OutboxProcessor(val outboxDao: OutboxDao) {
-
-    private val logger = KotlinLogging.logger {}
 
     @Scheduled(fixedDelay = 60000, initialDelayString = "#{ T(java.util.concurrent.ThreadLocalRandom).current().nextInt(30000, 60000) }")
     fun processOutbox() {
