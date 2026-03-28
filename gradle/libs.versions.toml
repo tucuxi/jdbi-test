@@ -14,7 +14,6 @@ pgEmbedded = "5.4.1"
 [libraries]
 # Platforms (BOMs)
 jdbi-bom = { group = "org.jdbi", name = "jdbi3-bom", version.ref = "jdbi" }
-spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "springBoot" }
 
 # Application Dependencies
 # In build.gradle.kts, access these as: libs.spring.boot.starter.web

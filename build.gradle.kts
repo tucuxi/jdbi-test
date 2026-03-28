@@ -17,8 +17,8 @@ kotlin {
 
 dependencies {
     // BOMs
+	implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
     implementation(platform(libs.jdbi.bom))
-    implementation(platform(libs.spring.boot.dependencies))
 
     // Spring Core
     implementation(libs.spring.boot.starter.jpa)
