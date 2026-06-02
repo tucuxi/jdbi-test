@@ -7,7 +7,7 @@ springBoot = "4.0.6"
 jdbi = "3.53.0"
 flyway = "12.6.2"
 postgresql = "42.7.11"
-kotlinLogging = "8.0.03"
+kotlinLogging = "8.0.4"
 ulid = "1.6.0"
 pgEmbedded = "5.4.1"
 
