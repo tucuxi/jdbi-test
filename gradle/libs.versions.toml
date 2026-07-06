@@ -4,7 +4,7 @@ kotlin = "2.4.0"
 springBoot = "4.1.0"
 
 # Libraries
-jdbi = "3.53.0"
+jdbi = "3.54.0"
 flyway = "12.9.0"
 postgresql = "42.7.12"
 kotlinLogging = "8.0.4"
